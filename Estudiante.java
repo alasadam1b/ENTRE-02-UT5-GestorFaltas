@@ -4,11 +4,12 @@
  */
 public class Estudiante {
     private final static String SEPARADOR = ",";
-    private String nombre;
+    private String nombre = "";
     private String apellidos;
     private int faltasNoJustificadas;
     private int faltasJustificadas;
-
+    private TipoApercibimiento apercibimiento;
+    
     /**
      *  
      *  Inicializa los atributos a partir de la información recibida
@@ -17,10 +18,22 @@ public class Estudiante {
      *  
      */
     public Estudiante(String lineaDatos) {
-         
-
+        String[] tokens = lineaDatos.strip().split(SEPARADOR);
+        String[] tokens2;
+        tokens2 = tokens[0].strip().split(" ");
+        for(int i=0; i<tokens2.length-1; i++){
+            if(!tokens2[i].equalsIgnoreCase("")){
+                nombre += tokens2[i].toUpperCase().charAt(0) + ". ";
+            }
+        }
+        StringBuilder sb = new StringBuilder(tokens2[tokens2.length-1]);
+        sb.setCharAt(0, tokens2[tokens2.length-1].toUpperCase().charAt(0));
+        nombre += sb.toString();
+        apellidos = tokens[1].toUpperCase().strip();
+        apercibimiento = TipoApercibimiento.DIEZ;
+        faltasNoJustificadas =  Integer.parseInt(tokens[2].strip());
+        faltasJustificadas = Integer.parseInt(tokens[3].strip());
     }
-
 
     /**
      * accesor para el nombre completo
@@ -48,7 +61,7 @@ public class Estudiante {
      *  mutador para los apellidos
      */
     public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
+        this.apellidos = apellidos.toUpperCase();
     }
 
     /**
@@ -93,13 +106,16 @@ public class Estudiante {
      * (ver enunciado)
      */
     public String toString() {
-        
-        return null;
-
+        String lineaFormateada = "";
+        lineaFormateada += String.format("%-25s%s\n", "Apellidos y Nombre:", apellidos + ", " + nombre);
+        lineaFormateada += String.format("%-25s%s\n", "Faltas No Justificadas:", faltasNoJustificadas);
+        lineaFormateada += String.format("%-25s%s\n", "Faltas Justificadas:", faltasJustificadas);
+        lineaFormateada += String.format("%-25s%s\n", "Apercibimientos:", apercibimiento);
+        lineaFormateada += String.format("%-25s\n", "--------------------");
+        return lineaFormateada;
     }
 
-
-     public static void main(String[] args) {
+    public static void main(String[] args) {
         Estudiante e1 = new Estudiante("  ander ibai  ,  Ruiz Sena , 12, 23");
         System.out.println(e1);
         System.out.println();
@@ -127,5 +143,4 @@ public class Estudiante {
         System.out.println();
 
     }
-
 }
